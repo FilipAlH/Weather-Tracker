@@ -101,15 +101,17 @@ function getFetch(savedInput) {
                     })
                     .then (function (generateCard) {
                         console.log(generateCard)
+                        forecastContainer.empty()
                         for(i = 1; i < 6; i++) {
                         forecastContainer.append(
-                        ` <div class="card col-2">
+                        ` <div class="card col-2 m-3">
                             <div class="card-body">
-                                <h5 class="card-title">${moment.unix(generateCard.daily[i].dt).format("MM/DD/YYYY")}</h5>
+                                <h5 class="card-title">${moment.unix(generateCard.daily[i].dt).format("MM/DD/YYYY")}</h5><br>
+                                <img src="http://openweathermap.org/img/wn/${generateCard.daily[i].weather[0].icon}@2x.png">
                                 <p class="card-text">
-                                    Temp: <span class="temp"></span><br>
-                                    Wind: <span class="wind"></span><br>
-                                    Humidity: <span class="humidity"></span>
+                                    Daily High: <span class="temp">${generateCard.daily[i].temp.max}°C</span><br>
+                                    Wind: <span class="wind">${generateCard.daily[i].wind_speed} Km/h</span><br>
+                                    Humidity: <span class="humidity">${generateCard.daily[i].humidity}%</span>
                                 </p>
                             </div>
                             </div>`)
