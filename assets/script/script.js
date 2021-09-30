@@ -8,6 +8,9 @@ let humM = $('.mainhumidity')
 let uvM = $('.UVbox')
 let title = $('.date')
 
+let multiForecast = $('.5-Day')
+let forecastContainer = $('.forecast')
+
 let key = "&appid=c2d1d7fd47ff065b027bb129eaf2461e"
 let keyforimage = "9f981bdef705462cbfe140542212809"
 
@@ -25,7 +28,7 @@ function getFetch(savedInput) {
         if (result.status != 200) {
           modal.trigger("click")
           userInput.val("")
-          return 
+          return
         } else {
             return result.json()
         }
@@ -50,7 +53,7 @@ function getFetch(savedInput) {
                 if (uvresult.status != 200) {
                     modal.trigger("click")
                     userInput.val("")
-                    return 
+                    return
                 } else {
                     return uvresult.json()
                 }
@@ -68,13 +71,13 @@ function getFetch(savedInput) {
                     uvM.css("background-color", "#e661e8")
                 }
             })
-        
+
         fetch("http://api.weatherapi.com/v1/current.json?key=9f981bdef705462cbfe140542212809&q=" + savedInput + "&aqi=no")
             .then(function (image) {
                 if (image.status != 200) {
                     modal.trigger("click")
                     userInput.val("")
-                    return 
+                    return
                 } else {
                     return image.json()
                 }
@@ -83,8 +86,35 @@ function getFetch(savedInput) {
                 console.log(getimage.current.condition.icon)
                 title.append(`<img src="https://${getimage.current.condition.icon}">`)
             })
-    }
 
-    
+        multiForecast.replaceWith(`<h3>5-Day Forecast:<h3>`)
+
+                fetch("https://api.openweathermap.org/data/2.5/onecall?lat=" + coordinates.lat + "&lon=" + coordinates.lon + "&exclude={current,minutely,hourly,alerts}&units=metric" + key)
+                    .then(function(day) {
+                        if (day.status != 200) {
+                            modal.trigger("click")
+                            userInput.val("")
+                            return
+                        } else {
+                            return day.json()
+                        }
+                    })
+                    .then (function (generateCard) {
+                        console.log(generateCard)
+                        for(i = 1; i < 6; i++) {
+                        forecastContainer.append(
+                        ` <div class="card col-2">
+                            <div class="card-body">
+                                <h5 class="card-title">${moment.unix(generateCard.daily[i].dt).format("MM/DD/YYYY")}</h5>
+                                <p class="card-text">
+                                    Temp: <span class="temp"></span><br>
+                                    Wind: <span class="wind"></span><br>
+                                    Humidity: <span class="humidity"></span>
+                                </p>
+                            </div>
+                            </div>`)
+                        }
+                    })
+    }
 }
 
