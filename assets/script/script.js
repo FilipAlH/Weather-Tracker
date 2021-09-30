@@ -7,6 +7,7 @@ let windM = $('.mainwind')
 let humM = $('.mainhumidity')
 let uvM = $('.UVbox')
 let title = $('.date')
+let jumbotron = $('.jumbotron')
 
 let multiForecast = $('.5-Day')
 let forecastContainer = $('.forecast')
@@ -35,6 +36,7 @@ function getFetch(savedInput) {
     })
     .then(function(data) {
         console.log(data)
+        jumbotron.addClass("border")
         title.text(data.name + moment().format("(MM/DD/YYYY)"))
         tempM.text("Temp: " + data.main.temp + "°C")
         windM.text("Wind: " + data.wind.speed + " Km/h")
@@ -87,7 +89,7 @@ function getFetch(savedInput) {
                 title.append(`<img src="https://${getimage.current.condition.icon}">`)
             })
 
-        multiForecast.replaceWith(`<h3>5-Day Forecast:<h3>`)
+        multiForecast.replaceWith(`<h3 class="row 5-Day mx-3 mt-3">5-Day Forecast:<h3>`)
 
                 fetch("https://api.openweathermap.org/data/2.5/onecall?lat=" + coordinates.lat + "&lon=" + coordinates.lon + "&exclude={current,minutely,hourly,alerts}&units=metric" + key)
                     .then(function(day) {
