@@ -9,6 +9,7 @@ let uvM = $('.UVbox')
 let title = $('.date')
 
 let key = "&appid=c2d1d7fd47ff065b027bb129eaf2461e"
+let keyforimage = "9f981bdef705462cbfe140542212809"
 
 function saveSearch() {
     savedInput = userInput.val()
@@ -31,8 +32,8 @@ function getFetch(savedInput) {
     })
     .then(function(data) {
         console.log(data)
-
-        tempM.text("Temp: " + data.main.temp + " degrees Celcius")
+        title.text(data.name + moment().format("(MM/DD/YYYY)"))
+        tempM.text("Temp: " + data.main.temp + "°C")
         windM.text("Wind: " + data.wind.speed + " Km/h")
         humM.text("Humidity: " + data.main.humidity + "%")
         let coordinates = {
@@ -67,7 +68,23 @@ function getFetch(savedInput) {
                     uvM.css("background-color", "#e661e8")
                 }
             })
+        
+        fetch("http://api.weatherapi.com/v1/current.json?key=9f981bdef705462cbfe140542212809&q=" + savedInput + "&aqi=no")
+            .then(function (image) {
+                if (image.status != 200) {
+                    modal.trigger("click")
+                    userInput.val("")
+                    return 
+                } else {
+                    return image.json()
+                }
+            })
+            .then (function (getimage) {
+                console.log(getimage.current.condition.icon)
+                title.append(`<img src="https://${getimage.current.condition.icon}">`)
+            })
     }
-}
 
+    
+}
 
