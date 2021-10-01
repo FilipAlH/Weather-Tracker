@@ -2,6 +2,7 @@ let button = $('form')
 let userInput = $('#city')
 let modal = $('.btnmodal')
 
+let storedStuff = $('.ul')
 let tempM = $('.maintemp')
 let windM = $('.mainwind')
 let humM = $('.mainhumidity')
@@ -28,9 +29,22 @@ function getFetch(savedInput) {
     .then(function(result) {
         if (result.status != 200) {
           modal.trigger("click")
-          userInput.val("")
           return
         } else {
+            let storedList = JSON.parse(localStorage.getItem("searches"))
+            let searches = {
+                ...storedList
+            }
+
+            searches[savedInput] = savedInput
+            console.log(searches)
+            storedStuff.empty()
+
+            for (i = 0; i < Object.keys(searches).length; i++) {
+                storedStuff.append(`<li class="list-group-item">${searches[Object.keys(searches)[i]]}</li>`)
+            }
+
+            localStorage.setItem("searches", JSON.stringify(searches))
             return result.json()
         }
     })
@@ -89,7 +103,7 @@ function getFetch(savedInput) {
                 title.append(`<img src="https://${getimage.current.condition.icon}">`)
             })
 
-        multiForecast.replaceWith(`<h3 class="row 5-Day mx-3 mt-3">5-Day Forecast:<h3>`)
+        multiForecast.replaceWith(`<h3 class="row 5-Day mx-2 mt-3">5-Day Forecast:<h3>`)
 
                 fetch("https://api.openweathermap.org/data/2.5/onecall?lat=" + coordinates.lat + "&lon=" + coordinates.lon + "&exclude={current,minutely,hourly,alerts}&units=metric" + key)
                     .then(function(day) {
@@ -106,7 +120,7 @@ function getFetch(savedInput) {
                         forecastContainer.empty()
                         for(i = 1; i < 6; i++) {
                         forecastContainer.append(
-                        ` <div class="card col-2 m-3">
+                        ` <div class="card col-2 m-3 bg-secondary text-white">
                             <div class="card-body">
                                 <h5 class="card-title">${moment.unix(generateCard.daily[i].dt).format("MM/DD/YYYY")}</h5><br>
                                 <img src="http://openweathermap.org/img/wn/${generateCard.daily[i].weather[0].icon}@2x.png">
