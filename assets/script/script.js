@@ -2,7 +2,7 @@ let button = $('form')
 let userInput = $('#city')
 let modal = $('.btnmodal')
 
-let storedStuff = $('.ul')
+let storedStuff = $('.saved-history')
 let tempM = $('.maintemp')
 let windM = $('.mainwind')
 let humM = $('.mainhumidity')
@@ -23,6 +23,7 @@ function saveSearch() {
 }
 
 button.on("submit", saveSearch)
+storedStuff.on("click", redirect)
 
 function getFetch(savedInput) {
     fetch ("https://api.openweathermap.org/data/2.5/weather?q=" + savedInput + key + "&units=metric")
@@ -41,7 +42,7 @@ function getFetch(savedInput) {
             storedStuff.empty()
 
             for (i = 0; i < Object.keys(searches).length; i++) {
-                storedStuff.append(`<li class="list-group-item">${searches[Object.keys(searches)[i]]}</li>`)
+                storedStuff.append(`<div class=savedSearches><button type="button" class="storedButton">${searches[Object.keys(searches)[i]]}</button><div>`)
             }
 
             localStorage.setItem("searches", JSON.stringify(searches))
@@ -136,3 +137,7 @@ function getFetch(savedInput) {
     }
 }
 
+function redirect(event) {
+    console.log(event.target)
+    getFetch(event.target.innerText)
+}

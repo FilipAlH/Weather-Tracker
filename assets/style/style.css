@@ -1,0 +1,25 @@
+li {
+    justify-self: center;
+    flex-direction: column;
+}
+
+div button {
+    border: none;
+    background-color: rgb(113, 174, 253);
+    color: white;
+    width: 100%;
+}
+
+.savedSearches {
+    display: flex;
+    padding: 0px;
+    margin: 10px;
+}
+
+#dashboard {
+    background-color: rgb(113, 174, 253);
+}
+
+.btn-primary {
+    background-color: rgb(72, 148, 247);
+}
