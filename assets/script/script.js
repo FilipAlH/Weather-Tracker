@@ -13,12 +13,12 @@ let jumbotron = $('.jumbotron')
 let multiForecast = $('.5-Day')
 let forecastContainer = $('.forecast')
 
-let key = "&appid=c2d1d7fd47ff065b027bb129eaf2461e"
+let key = "&appid=2cd21894c76fa04de407f5720e63f66d"
 let keyforimage = "9f981bdef705462cbfe140542212809"
 
-function saveSearch() {
+function saveSearch(event) {
+    event.preventDefault()
     savedInput = userInput.val()
-    console.log(savedInput)
     getFetch(savedInput)
 }
 
@@ -38,7 +38,6 @@ function getFetch(savedInput) {
             }
 
             searches[savedInput] = savedInput
-            console.log(searches)
             storedStuff.empty()
 
             for (i = 0; i < Object.keys(searches).length; i++) {
@@ -50,7 +49,6 @@ function getFetch(savedInput) {
         }
     })
     .then(function(data) {
-        console.log(data)
         jumbotron.addClass("border")
         title.text(data.name + moment().format("(MM/DD/YYYY)"))
         tempM.text("Temp: " + data.main.temp + "°C")
@@ -60,7 +58,6 @@ function getFetch(savedInput) {
             lat: data.coord.lat,
             lon: data.coord.lon,
         }
-        console.log(coordinates)
         fetchForUV(coordinates)
     })
 
@@ -76,7 +73,6 @@ function getFetch(savedInput) {
                 }
             })
             .then(function(uvdata) {
-                console.log(uvdata.current.uvi)
                 uvM.text("UVI: " + uvdata.current.uvi)
                 if (uvdata.current.uvi < 2) {
                     uvM.css("background-color", "#6cd65e")
@@ -100,7 +96,6 @@ function getFetch(savedInput) {
                 }
             })
             .then (function (getimage) {
-                console.log(getimage.current.condition.icon)
                 title.append(`<img src="https://${getimage.current.condition.icon}">`)
             })
 
@@ -117,7 +112,6 @@ function getFetch(savedInput) {
                         }
                     })
                     .then (function (generateCard) {
-                        console.log(generateCard)
                         forecastContainer.empty()
                         for(i = 1; i < 6; i++) {
                         forecastContainer.append(
@@ -138,6 +132,5 @@ function getFetch(savedInput) {
 }
 
 function redirect(event) {
-    console.log(event.target)
     getFetch(event.target.innerText)
 }
